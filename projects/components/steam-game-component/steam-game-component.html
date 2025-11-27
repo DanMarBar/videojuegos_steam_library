@@ -1,0 +1,102 @@
+<div
+  class="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950 to-black text-white py-12 px-4"
+>
+  <!-- Título exactamente como lo tenías, pero bonito -->
+  <p
+    class="text-center text-6xl md:text-7xl font-black tracking-wider mb-12 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-2xl"
+  >
+    SteamLib
+  </p>
+
+  <!-- Tu @let exactamente igual -->
+  @let games = (steamGames | async);
+
+  <!-- Tu input exactamente igual, pero ahora sí se ve pro -->
+  <div class="max-w-2xl mx-auto mb-12">
+    <input
+      type="text"
+      placeholder="Buscar juego"
+      (input)="filterGames($event.target.value)"
+      class="w-full px-8 py-5 text-xl font-medium bg-gray-900/80 border-2 border-purple-500/50 rounded-2xl focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30 transition-all duration-300 placeholder-gray-500 shadow-xl"
+    />
+  </div>
+
+  <!-- TU @if EXACTAMENTE IGUAL -->
+  @if (!games) {
+  <div class="text-center py-20">
+    <div
+      class="w-20 h-20 mx-auto animate-spin rounded-full border-8 border-t-cyan-400 border-r-purple-500 border-b-pink-500 border-l-transparent"
+    ></div>
+    <p class="text-2xl mt-8 font-bold text-cyan-300">Cargando juegos...</p>
+  </div>
+  } @else {
+
+  <!-- TU lista exactamente igual, pero ahora queda ÉPICA -->
+  <ul class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    @for (game of games.slice(0, 100); track game.Game) {
+    <li class="group">
+      <!-- Tarjeta con cristal morado + hover brutal -->
+      <div
+        class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900/40 via-gray-900/90 to-black/80 backdrop-blur-xl border border-purple-500/30 p-8 shadow-2xl hover:shadow-purple-500/40 hover:border-cyan-400 transition-all duration-500 transform hover:-translate-y-3"
+      >
+        <!-- Brillo al hacer hover -->
+        <div
+          class="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-transparent to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+        ></div>
+
+        <!-- Nombre del juego - grande y destacado -->
+        <h3
+          class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-300 mb-5 tracking-wide drop-shadow-lg truncate"
+        >
+          {{ game.Game }}
+        </h3>
+
+        <!-- Año -->
+        <div class="mb-4">
+          <span class="text-purple-400 font-semibold text-sm uppercase tracking-wider"
+            >Año de lanzamiento</span
+          >
+          <h3 class="text-2xl font-bold text-white">{{ game.Year ? game.Year : 'Sin año' }}</h3>
+        </div>
+
+        <!-- Plataforma -->
+        <div class="mb-6">
+          <span class="text-pink-400 font-semibold text-sm uppercase tracking-wider"
+            >Plataforma</span
+          >
+          <h3 class="text-xl font-bold text-cyan-300" [title]="game.Platform">
+            {{ game.Platform }}
+          </h3>
+        </div>
+
+        <!-- Botón disfrazado (el link real está oculto) -->
+        <a
+          [href]="game.GameLink"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="relative z-50 block text-center py-4 px-8 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-xl font-black uppercase tracking-widest text-lg hover:from-cyan-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 cursor-pointer"
+        >
+          Jugar en Steam
+        </a>
+
+        <!-- Pequeño detalle decorativo -->
+        <div
+          class="absolute -top-4 -right-4 w-24 h-24 bg-purple-600/20 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-6 -left-6 w-32 h-32 bg-cyan-600/20 rounded-full blur-3xl"
+        ></div>
+      </div>
+    </li>
+    }
+  </ul>
+  }
+
+  <!-- Si hay búsqueda y no hay resultados -->
+  @if (games && games.length === 0) {
+  <div class="text-center py-20">
+    <p class="text-5xl font-black text-red-500 animate-pulse">JUEGO NO ENCONTRADO</p>
+    <p class="text-xl mt-4 text-gray-400">Prueba con otro nombre</p>
+  </div>
+  }
+</div>
